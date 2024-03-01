@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://psbfalabnqne"]
+
+[ext_resource type="Script" path="res://Timeline.gd" id="1_502ag"]
+
+[node name="Timeline" type="Node2D"]
+script = ExtResource("1_502ag")
+
+[node name="Line2D" type="Line2D" parent="."]
+default_color = Color(0.12549, 0.12549, 0.12549, 1)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(0.8, 0.8)
