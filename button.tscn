@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://crsxwp25whwgu"]
+
+[ext_resource type="Texture2D" uid="uid://bb1fg36ebbqjb" path="res://button.png" id="1_885m1"]
+
+[node name="HBoxContainer" type="HBoxContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+size_flags_horizontal = 3
+
+[node name="button" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 6
+texture = ExtResource("1_885m1")

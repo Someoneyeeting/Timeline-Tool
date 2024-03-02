@@ -11,7 +11,7 @@ default_font_size = 25
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_eepkx"]
 shader = ExtResource("2_cavd4")
-shader_parameter/stretch = 0.776071
+shader_parameter/stretch = 0.726872
 shader_parameter/image = ExtResource("4_ohv1e")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_08iwy"]
@@ -33,20 +33,16 @@ default_font_size = 24
 
 [node name="Event" type="Control"]
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = 0
+size_flags_horizontal = 0
+size_flags_vertical = 2
 theme = SubResource("Theme_2v1r8")
 script = ExtResource("2_l4xi0")
 image = ExtResource("4_ohv1e")
 
 [node name="VSplitContainer" type="VBoxContainer" parent="."]
-layout_mode = 2
-offset_right = 458.0
-offset_bottom = 733.0
-theme_override_constants/separation = 0
+offset_right = 450.0
+offset_bottom = 677.0
 
 [node name="Panel" type="Panel" parent="VSplitContainer"]
 material = SubResource("ShaderMaterial_eepkx")
@@ -80,5 +76,6 @@ layout_mode = 2
 theme = SubResource("Theme_pnmdj")
 bbcode_enabled = true
 text = "I DONT GIVE A FUCK
-PWO WPOW OPWO WPWOPWO PWOP RERERERE POWPOWPOW TOROEOROROROP, "
+PWO WPOW OPWO WPWOPWO PWOP RERERERE POWPOWPOW TOROEOROROROP, 
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
 fit_content = true
