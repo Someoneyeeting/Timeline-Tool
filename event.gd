@@ -8,6 +8,8 @@ var text = ""
 @onready var ri = $PanelContainer/MarginContainer/VSplitContainer/RichTextLabel
 
 
+func _ready() -> void:
+	$AnimationPlayer.play("Create")
 
 func _physics_process(delta: float) -> void:
 	custom_minimum_size.y = (ri.global_position - global_position).y + ri.size.y

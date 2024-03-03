@@ -4,7 +4,7 @@ extends Node2D
 var a = 0
 var v = 0.0
 
-var speed = 20.0
+var speed = 70.0
 var lastpos = Vector2(0,0)
 
 var DATE = preload("res://date.tscn")
@@ -38,7 +38,7 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	
 	var last = $VBoxContainer.get_children()[-1].get_global_rect()
-	$Line2D.points[-1].y = lerp($Line2D.points[-1].y,last.position.y + last.size.y + 50,0.04)
+	$Line2D.points[-1].y = lerp($Line2D.points[-1].y,last.position.y + last.size.y + 50,0.1)
 	
 	v = lerp(v,0.0,0.08)
 	if(Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)):

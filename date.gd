@@ -15,7 +15,6 @@ func add_event():
 	
 	eventTree.add_child(cont)
 	
-
 	var btn = load("res://button.tscn").instantiate()
 
 
