@@ -1,0 +1,58 @@
+[gd_scene load_steps=4 format=3 uid="uid://b36a41i66lka8"]
+
+[ext_resource type="Script" path="res://date.gd" id="1_0ne7s"]
+[ext_resource type="Theme" uid="uid://c1wftlbcrx1c6" path="res://Font.tres" id="1_7gtl1"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jr4aw"]
+bg_color = Color(0.6, 0.6, 0.6, 0.219608)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="Date" type="VBoxContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_0ne7s")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+theme = ExtResource("1_7gtl1")
+theme_override_colors/font_color = Color(0.905882, 0.494118, 0, 1)
+theme_override_font_sizes/font_size = 50
+text = "771/5/13"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Events" type="HBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="HBoxContainer"]
+self_modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="HBoxContainer/Button"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_jr4aw")
+
+[node name="Label" type="Label" parent="HBoxContainer/Button/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_7gtl1")
+text = "+"
+horizontal_alignment = 1
+vertical_alignment = 1
