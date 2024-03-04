@@ -1,8 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://dtdegx73yxa7h"]
+[gd_scene load_steps=15 format=3 uid="uid://dtdegx73yxa7h"]
 
 [ext_resource type="FontFile" uid="uid://riih025gkiwa" path="res://Roboto-Medium.ttf" id="1_3pqkn"]
 [ext_resource type="Shader" path="res://panel.gdshader" id="2_cavd4"]
 [ext_resource type="Script" path="res://event.gd" id="2_l4xi0"]
+[ext_resource type="Texture2D" uid="uid://6q6k2ejp4be6" path="res://maxresdefault.jpg" id="2_p51iy"]
 [ext_resource type="Texture2D" uid="uid://dmfwk707gnqxm" path="res://pexels-mihai-vlasceanu-1400249.jpg" id="2_xdlgv"]
 [ext_resource type="Theme" uid="uid://c1wftlbcrx1c6" path="res://Font.tres" id="5_e7lhe"]
 
@@ -49,6 +50,7 @@ _data = {
 shader = ExtResource("2_cavd4")
 shader_parameter/stretch = 0.25
 shader_parameter/off = 0.0
+shader_parameter/image = ExtResource("2_xdlgv")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_08iwy"]
 corner_radius_top_left = 30
@@ -68,6 +70,7 @@ custom_minimum_size = Vector2(0, 523)
 offset_right = 450.0
 theme_override_styles/panel = SubResource("StyleBoxEmpty_e0wkh")
 script = ExtResource("2_l4xi0")
+image = ExtResource("2_p51iy")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("../VSplitContainer")
@@ -81,11 +84,11 @@ layout_mode = 2
 [node name="Image" type="Panel" parent="VSplitContainer"]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_eepkx")
+custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_08iwy")
 
 [node name="Button" type="Button" parent="VSplitContainer/Image"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -157,17 +160,10 @@ fit_content = true
 [node name="TextureButton" type="TextureButton" parent="."]
 layout_mode = 2
 
-[node name="ImageSelect" type="FileDialog" parent="."]
-title = "Open a File"
+[node name="FileDialog" type="FileDialog" parent="."]
 size = Vector2i(379, 143)
-ok_button_text = "Open"
-file_mode = 0
-access = 2
-filters = PackedStringArray("*.png, *.jpg, *.jpeg ; Supported Images")
-use_native_dialog = true
 
 [connection signal="pressed" from="VSplitContainer/Image/Button" to="." method="_on_button_pressed"]
 [connection signal="mouse_entered" from="VSplitContainer/Body/MarginContainer/VSplitContainer/Label" to="VSplitContainer" method="_on_label_mouse_entered"]
 [connection signal="mouse_exited" from="VSplitContainer/Body/MarginContainer/VSplitContainer/Label" to="VSplitContainer" method="_on_label_mouse_exited"]
 [connection signal="pressed" from="TextureButton" to="." method="_on_texture_button_pressed"]
-[connection signal="file_selected" from="ImageSelect" to="." method="_on_image_select_file_selected"]

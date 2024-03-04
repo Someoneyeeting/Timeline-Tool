@@ -2,23 +2,29 @@ extends Control
 
 signal enterEdit
 signal exitEdit
-@export var image : Texture2D
+var image : Texture2D
 #@onready var ri = $PanelContainer/MarginContainer/VSplitContainer/RichTextLabel
 
 var title = "Title"
-var body = ""
+var body = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
 var editmode = false
 var is_hovered = false
+var dragpos = null
+var ogpos = 0
 
 
 
 
 func _ready() -> void:
 	$AnimationPlayer.play("Create")
+	%Image.material = %Image.material.duplicate()
 
 func enter_edit():
 	emit_signal("enterEdit",self)
 	editmode = true
+	
+	$VSplitContainer/Image/Button.show()
+	
 	%Labeledit.text = title
 	%TextEdit.text = body
 	%Label.hide()
@@ -30,6 +36,10 @@ func enter_edit():
 func exit_edit(save):
 	emit_signal("exitEdit")
 	editmode = false
+	
+	$VSplitContainer/Image/Button.hide()
+	
+	
 	title = %Labeledit.text
 	body = %TextEdit.text
 	%Label.show()
@@ -39,6 +49,7 @@ func exit_edit(save):
 	$TextureButton.show()
 
 func _physics_process(delta: float) -> void:
+	
 	custom_minimum_size.y = (%RichTextLabel.global_position - global_position).y + %RichTextLabel.size.y
 	%RichTextLabel.text = body
 	%Label.text = title
@@ -47,6 +58,31 @@ func _physics_process(delta: float) -> void:
 		exit_edit(false)
 	
 	if(image):
+		
+		$VSplitContainer/Image/Sprite2D.texture = image
+		var sc = %Image.size.x / image.get_size().x
+		$VSplitContainer/Image/Sprite2D.scale = Vector2(sc,sc)
+		
+		
+		if($VSplitContainer/Image/Button.is_hovered()):
+			if(Input.is_action_just_pressed("rclick")):
+				dragpos = get_global_mouse_position().y
+				ogpos = $VSplitContainer/Image/Sprite2D.position.y
+				$VSplitContainer/Image/Sprite2D.show()
+		
+		$VSplitContainer/Image/Button.visible = not dragpos
+		$VSplitContainer/Image/Button.modulate.a = 0.4 if $VSplitContainer/Image/Button.is_hovered() else 0
+		
+		if(dragpos):
+			$VSplitContainer/Image/Sprite2D.position.y = ogpos + get_global_mouse_position().y - dragpos
+			$VSplitContainer/Image/Sprite2D.position.y = clamp($VSplitContainer/Image/Sprite2D.position.y,-(image.get_size().y * sc - %Image.size.y),0)
+		
+		%Image.material.set_shader_parameter("off",($VSplitContainer/Image/Sprite2D.position.y / -(image.get_size().y * sc)))
+		
+		if(not Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)):
+			dragpos = null
+			$VSplitContainer/Image/Sprite2D.hide()
+
 		var size = %Image.size
 		%Image.material.set_shader_parameter("image",image)
 		var stretch = (float(image.get_width()) / float(image.get_height())) * (size.y / size.x)
@@ -54,10 +90,18 @@ func _physics_process(delta: float) -> void:
 		%Image.show()
 		%Body.add_theme_constant_override("corner_radius_top_right",0)
 		%Body.add_theme_constant_override("corner_radius_top_left",0)
+		
+		%Image.custom_minimum_size.y = lerp(%Image.custom_minimum_size.y,200.,0.2)
 	else:
-		%Image.hide()
-		%Body.add_theme_constant_override("corner_radius_top_right",30)
-		%Body.add_theme_constant_override("corner_radius_top_left",30)
+		#%Image.hide()
+		if(editmode):
+			%Image.custom_minimum_size.y = lerp(%Image.custom_minimum_size.y,200.,0.2)
+		else:
+			%Image.custom_minimum_size.y = lerp(%Image.custom_minimum_size.y,0.,0.2)
+			
+		
+		#%Body.add_theme_constant_override("corner_radius_top_right",30)
+		#%Body.add_theme_constant_override("corner_radius_top_left",30)
 
 
 func _on_texture_button_pressed() -> void:
@@ -65,3 +109,17 @@ func _on_texture_button_pressed() -> void:
 			exit_edit(false)
 		else:
 			enter_edit()
+
+
+func _on_button_pressed() -> void:
+	$ImageSelect.popup()
+
+
+func _on_image_select_file_selected(path: String) -> void:
+	$VSplitContainer/Image/Sprite2D.position.y = 0
+	var img = Image.new()
+	img.load(path)
+	
+	var image_texture = ImageTexture.new()
+	image_texture.set_image(img)
+	image = image_texture
