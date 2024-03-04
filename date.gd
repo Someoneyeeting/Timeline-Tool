@@ -11,7 +11,10 @@ func add_event():
 	
 	cont.add_child(event)
 	
-	event.text = "A".repeat(randi_range(40,600))
+	event.body = "A".repeat(randi_range(40,600))
+
+	event.connect("enterEdit",get_node("../../../").enter_edit)
+	event.connect("exitEdit",get_node("../../../").exit_edit)
 	
 	eventTree.add_child(cont)
 	

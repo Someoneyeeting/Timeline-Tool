@@ -4,8 +4,13 @@ extends Node2D
 var a = 0
 var v = 0.0
 
+var editTarget
+
 var speed = 70.0
 var lastpos = Vector2(0,0)
+
+var camerapos = Vector2(0,0)
+var ogcampos = Vector2(0,0)
 
 var DATE = preload("res://date.tscn")
 
@@ -19,12 +24,20 @@ func add_event(left):
 		sep.custom_minimum_size.x = 510
 	
 	cont.add_child(event)
-	#cont.move_child(event,-2)
-	
-	#event.text = "A".repeat(randi_range(40,600))
 	
 	$VBoxContainer.add_child(cont)
+	
+	
+func enter_edit(target):
+	editTarget = target
+	#ogcampos = $Camera2D.position
+	print("aaaaaa")
+	#camerapos = target.position
+	
 
+func exit_edit():
+	editTarget = null
+	#camerapos = ogcampos
 
 func _ready() -> void:
 	#$Line2D.global_position = Vector2(0,20)
@@ -40,15 +53,22 @@ func _physics_process(delta: float) -> void:
 	var last = $VBoxContainer.get_children()[-1].get_global_rect()
 	$Line2D.points[-1].y = lerp($Line2D.points[-1].y,last.position.y + last.size.y + 50,0.1)
 	
-	v = lerp(v,0.0,0.08)
-	if(Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)):
-		v = lastpos.y - get_viewport().get_mouse_position().y
-	
-	if(Input.is_action_just_pressed("mwd")):
-		v = lerp(v,speed,0.4)
-	elif(Input.is_action_just_pressed("mwu")):
-		v = lerp(v,-speed,0.4)
-	
-	$Camera2D.position.y += v
-	$Camera2D.position.y = clamp($Camera2D.position.y,$Line2D.points[0].y,last.position.y + last.size.y)
-	lastpos = get_viewport().get_mouse_position()
+	if(not editTarget):
+		v = lerp(v,0.0,0.08)
+		if(Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)):
+			v = lastpos.y - get_viewport().get_mouse_position().y
+		
+		if(Input.is_action_just_pressed("mwd")):
+			v = lerp(v,speed,0.4)
+		elif(Input.is_action_just_pressed("mwu")):
+			v = lerp(v,-speed,0.4)
+		
+		camerapos.y += v
+		camerapos.y = clamp(camerapos.y,$Line2D.points[0].y,last.position.y + last.size.y)
+		$Camera2D.position = lerp($Camera2D.position,camerapos,0.1)
+		$Camera2D.zoom = lerp($Camera2D.zoom,Vector2(0.8,0.8),0.1)
+		lastpos = get_viewport().get_mouse_position()
+	else:
+		var center = editTarget.global_position + editTarget.size / 2
+		$Camera2D.position = lerp($Camera2D.position,center,0.1)
+		$Camera2D.zoom = lerp($Camera2D.zoom,Vector2(0.7,0.7),0.1)
