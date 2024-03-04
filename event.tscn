@@ -6,27 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://d3khbpjc8bhn3" path="res://hq720.jpg" id="4_ohv1e"]
 [ext_resource type="Theme" uid="uid://c1wftlbcrx1c6" path="res://Font.tres" id="5_e7lhe"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_eepkx"]
-shader = ExtResource("2_cavd4")
-shader_parameter/stretch = 0.726872
-shader_parameter/image = ExtResource("4_ohv1e")
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_08iwy"]
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6g4xe"]
-bg_color = Color(0.164706, 0.164706, 0.164706, 1)
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-
-[sub_resource type="Theme" id="Theme_pnmdj"]
-default_font = ExtResource("1_3pqkn")
-default_font_size = 24
-
-[sub_resource type="Theme" id="Theme_2v1r8"]
-default_font = ExtResource("1_3pqkn")
-default_font_size = 25
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_e0wkh"]
 
 [sub_resource type="Animation" id="Animation_cgufk"]
 resource_name = "Create"
@@ -65,20 +45,48 @@ _data = {
 "RESET": SubResource("Animation_uornm")
 }
 
-[node name="VSplitContainer" type="VBoxContainer"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_eepkx"]
+shader = ExtResource("2_cavd4")
+shader_parameter/stretch = 0.726872
+shader_parameter/image = ExtResource("4_ohv1e")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_08iwy"]
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6g4xe"]
+bg_color = Color(0.164706, 0.164706, 0.164706, 1)
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+
+[sub_resource type="Theme" id="Theme_pnmdj"]
+default_font = ExtResource("1_3pqkn")
+default_font_size = 24
+
+[node name="event" type="PanelContainer"]
 offset_right = 450.0
-offset_bottom = 594.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_e0wkh")
 script = ExtResource("2_l4xi0")
 image = ExtResource("4_ohv1e")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../VSplitContainer")
+libraries = {
+"": SubResource("AnimationLibrary_44rlj")
+}
+
+[node name="VSplitContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Image" type="Panel" parent="VSplitContainer"]
+unique_name_in_owner = true
 material = SubResource("ShaderMaterial_eepkx")
 clip_contents = true
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_08iwy")
 
-[node name="TextureButton" type="TextureButton" parent="Panel"]
+[node name="TextureButton" type="TextureButton" parent="VSplitContainer/Image"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -86,29 +94,30 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="Body" type="PanelContainer" parent="VSplitContainer"]
+unique_name_in_owner = true
 show_behind_parent = true
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_6g4xe")
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VSplitContainer/Body"]
 layout_mode = 2
 theme_override_constants/margin_left = 30
 theme_override_constants/margin_top = 30
 theme_override_constants/margin_right = 30
 theme_override_constants/margin_bottom = 30
 
-[node name="VSplitContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+[node name="VSplitContainer" type="VBoxContainer" parent="VSplitContainer/Body/MarginContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="PanelContainer/MarginContainer/VSplitContainer"]
+[node name="Label" type="Label" parent="VSplitContainer/Body/MarginContainer/VSplitContainer"]
 unique_name_in_owner = true
 modulate = Color(1, 0.501961, 0, 1)
 layout_mode = 2
 theme = ExtResource("5_e7lhe")
 text = "Title"
 
-[node name="Labeledit" type="TextEdit" parent="PanelContainer/MarginContainer/VSplitContainer"]
+[node name="Labeledit" type="TextEdit" parent="VSplitContainer/Body/MarginContainer/VSplitContainer"]
 unique_name_in_owner = true
 visible = false
 modulate = Color(1, 0.501961, 0, 1)
@@ -117,7 +126,7 @@ theme = ExtResource("5_e7lhe")
 text = "Title"
 scroll_fit_content_height = true
 
-[node name="TextEdit" type="TextEdit" parent="PanelContainer/MarginContainer/VSplitContainer"]
+[node name="TextEdit" type="TextEdit" parent="VSplitContainer/Body/MarginContainer/VSplitContainer"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -130,7 +139,7 @@ wrap_mode = 1
 scroll_smooth = true
 scroll_fit_content_height = true
 
-[node name="RichTextLabel" type="RichTextLabel" parent="PanelContainer/MarginContainer/VSplitContainer"]
+[node name="RichTextLabel" type="RichTextLabel" parent="VSplitContainer/Body/MarginContainer/VSplitContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme = SubResource("Theme_pnmdj")
@@ -140,16 +149,9 @@ PWO WPOW OPWO WPWOPWO PWOP RERERERE POWPOWPOW TOROEOROROROP,
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
 fit_content = true
 
-[node name="Event" type="Control" parent="."]
+[node name="TextureButton" type="TextureButton" parent="."]
 layout_mode = 2
-size_flags_horizontal = 2
-size_flags_vertical = 3
-theme = SubResource("Theme_2v1r8")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_44rlj")
-}
-
-[connection signal="mouse_entered" from="PanelContainer/MarginContainer/VSplitContainer/Label" to="." method="_on_label_mouse_entered"]
-[connection signal="mouse_exited" from="PanelContainer/MarginContainer/VSplitContainer/Label" to="." method="_on_label_mouse_exited"]
+[connection signal="mouse_entered" from="VSplitContainer/Body/MarginContainer/VSplitContainer/Label" to="VSplitContainer" method="_on_label_mouse_entered"]
+[connection signal="mouse_exited" from="VSplitContainer/Body/MarginContainer/VSplitContainer/Label" to="VSplitContainer" method="_on_label_mouse_exited"]
+[connection signal="pressed" from="TextureButton" to="." method="_on_texture_button_pressed"]

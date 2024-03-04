@@ -4,7 +4,7 @@ extends Control
 
 @export var image : Texture2D
 @export var title = ""
-@onready var ri = $PanelContainer/MarginContainer/VSplitContainer/RichTextLabel
+#@onready var ri = $PanelContainer/MarginContainer/VSplitContainer/RichTextLabel
 
 var text = ""
 var editmode = false
@@ -31,8 +31,8 @@ func exit_edit(save):
 	%RichTextLabel.show()
 
 func _physics_process(delta: float) -> void:
-	custom_minimum_size.y = (ri.global_position - global_position).y + ri.size.y
-	ri.text = text
+	custom_minimum_size.y = (%RichTextLabel.global_position - global_position).y + %RichTextLabel.size.y
+	%RichTextLabel.text = text
 	
 	if(Input.is_action_just_pressed("click") and is_hovered):
 		print("fuck")
@@ -42,24 +42,19 @@ func _physics_process(delta: float) -> void:
 			enter_edit()
 	
 	if(image):
-		var size = $Panel.size
-		$Panel.material.set_shader_parameter("image",image)
+		var size = %Image.size
+		%Image.material.set_shader_parameter("image",image)
 		var stretch = (float(image.get_width()) / float(image.get_height())) * (size.y / size.x)
-		$Panel.material.set_shader_parameter("stretch",stretch)
-		$Panel.show()
-		$PanelContainer.add_theme_constant_override("corner_radius_top_right",0)
-		$PanelContainer.add_theme_constant_override("corner_radius_top_left",0)
+		%Image.material.set_shader_parameter("stretch",stretch)
+		%Image.show()
+		%Body.add_theme_constant_override("corner_radius_top_right",0)
+		%Body.add_theme_constant_override("corner_radius_top_left",0)
 	else:
-		$Panel.hide()
-		$PanelContainer.add_theme_constant_override("corner_radius_top_right",30)
-		$PanelContainer.add_theme_constant_override("corner_radius_top_left",30)
+		%Image.hide()
+		%Body.add_theme_constant_override("corner_radius_top_right",30)
+		%Body.add_theme_constant_override("corner_radius_top_left",30)
 
 
-func _on_label_mouse_exited() -> void:
-	is_hovered = false
-	print("exit")
 
-
-func _on_label_mouse_entered() -> void:
-	is_hovered = true
-	print("enter")
+func _on_texture_button_pressed() -> void:
+	print("fuck")
