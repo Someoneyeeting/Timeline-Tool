@@ -78,6 +78,14 @@ custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_08iwy")
 
+[node name="TextureButton" type="TextureButton" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
 [node name="PanelContainer" type="PanelContainer" parent="."]
 show_behind_parent = true
 layout_mode = 2
@@ -90,16 +98,40 @@ theme_override_constants/margin_top = 30
 theme_override_constants/margin_right = 30
 theme_override_constants/margin_bottom = 30
 
-[node name="VSplitContainer" type="VSplitContainer" parent="PanelContainer/MarginContainer"]
+[node name="VSplitContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
 layout_mode = 2
 
 [node name="Label" type="Label" parent="PanelContainer/MarginContainer/VSplitContainer"]
-modulate = Color(1, 0.5, 0, 1)
+unique_name_in_owner = true
+modulate = Color(1, 0.501961, 0, 1)
 layout_mode = 2
 theme = ExtResource("5_e7lhe")
 text = "Title"
 
+[node name="Labeledit" type="TextEdit" parent="PanelContainer/MarginContainer/VSplitContainer"]
+unique_name_in_owner = true
+visible = false
+modulate = Color(1, 0.501961, 0, 1)
+layout_mode = 2
+theme = ExtResource("5_e7lhe")
+text = "Title"
+scroll_fit_content_height = true
+
+[node name="TextEdit" type="TextEdit" parent="PanelContainer/MarginContainer/VSplitContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme = SubResource("Theme_pnmdj")
+theme_override_colors/background_color = Color(0.12549, 0.12549, 0.12549, 0)
+text = "I DONT GIVE A FUCK
+PWO WPOW OPWO WPWOPWO PWOP RERERERE POWPOWPOW TOROEOROROROP, 
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+wrap_mode = 1
+scroll_smooth = true
+scroll_fit_content_height = true
+
 [node name="RichTextLabel" type="RichTextLabel" parent="PanelContainer/MarginContainer/VSplitContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 theme = SubResource("Theme_pnmdj")
 bbcode_enabled = true
@@ -118,3 +150,6 @@ theme = SubResource("Theme_2v1r8")
 libraries = {
 "": SubResource("AnimationLibrary_44rlj")
 }
+
+[connection signal="mouse_entered" from="PanelContainer/MarginContainer/VSplitContainer/Label" to="." method="_on_label_mouse_entered"]
+[connection signal="mouse_exited" from="PanelContainer/MarginContainer/VSplitContainer/Label" to="." method="_on_label_mouse_exited"]
