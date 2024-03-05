@@ -66,7 +66,6 @@ default_font_size = 24
 [node name="event" type="PanelContainer"]
 custom_minimum_size = Vector2(0, 523)
 offset_right = 450.0
-offset_bottom = 353.0
 theme_override_styles/panel = SubResource("StyleBoxEmpty_e0wkh")
 script = ExtResource("2_l4xi0")
 
@@ -157,7 +156,6 @@ fit_content = true
 
 [node name="TextureButton" type="TextureButton" parent="."]
 layout_mode = 2
-action_mode = 0
 
 [node name="ImageSelect" type="FileDialog" parent="."]
 title = "Open a File"

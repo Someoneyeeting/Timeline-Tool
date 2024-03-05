@@ -11,7 +11,7 @@ var editmode = false
 var is_hovered = false
 var dragpos = null
 var ogpos = 0
-
+var imagesize = 210.0
 
 
 
@@ -20,7 +20,6 @@ func _ready() -> void:
 	%Image.material = %Image.material.duplicate()
 
 func enter_edit():
-	emit_signal("enterEdit",self)
 	editmode = true
 	
 	$VSplitContainer/Image/Button.show()
@@ -32,9 +31,9 @@ func enter_edit():
 	%TextEdit.show()
 	%RichTextLabel.hide()
 	$TextureButton.hide()
+	emit_signal("enterEdit",self)
 	
 func exit_edit(save):
-	emit_signal("exitEdit")
 	editmode = false
 	
 	$VSplitContainer/Image/Button.hide()
@@ -47,6 +46,7 @@ func exit_edit(save):
 	%TextEdit.hide()
 	%RichTextLabel.show()
 	$TextureButton.show()
+	emit_signal("exitEdit")
 
 func _physics_process(delta: float) -> void:
 	
@@ -54,8 +54,13 @@ func _physics_process(delta: float) -> void:
 	%RichTextLabel.text = body
 	%Label.text = title
 	
-	if(Input.is_action_just_pressed("ui_accept") and editmode):
+	if(Input.is_action_just_pressed("ui_cancel") and editmode):
 		exit_edit(false)
+	
+	
+	if(editmode):
+		if(Input.is_action_just_pressed("click") and not get_rect().has_point(get_local_mouse_position())):
+			exit_edit(false)
 	
 	if(image):
 		
@@ -63,6 +68,7 @@ func _physics_process(delta: float) -> void:
 		var sc = %Image.size.x / image.get_size().x
 		$VSplitContainer/Image/Sprite2D.scale = Vector2(sc,sc)
 		
+		var imgsize = min(image.get_height() * sc,imagesize)
 		
 		if($VSplitContainer/Image/Button.is_hovered()):
 			if(Input.is_action_just_pressed("rclick")):
@@ -91,24 +97,17 @@ func _physics_process(delta: float) -> void:
 		%Body.add_theme_constant_override("corner_radius_top_right",0)
 		%Body.add_theme_constant_override("corner_radius_top_left",0)
 		
-		%Image.custom_minimum_size.y = lerp(%Image.custom_minimum_size.y,200.,0.2)
+		%Image.custom_minimum_size.y = lerp(%Image.custom_minimum_size.y,imgsize,0.2)
 	else:
-		#%Image.hide()
 		if(editmode):
-			%Image.custom_minimum_size.y = lerp(%Image.custom_minimum_size.y,200.,0.2)
+			%Image.custom_minimum_size.y = lerp(%Image.custom_minimum_size.y,imagesize,0.2)
 		else:
 			%Image.custom_minimum_size.y = lerp(%Image.custom_minimum_size.y,0.,0.2)
 			
-		
-		#%Body.add_theme_constant_override("corner_radius_top_right",30)
-		#%Body.add_theme_constant_override("corner_radius_top_left",30)
-
 
 func _on_texture_button_pressed() -> void:
-		if(editmode):
-			exit_edit(false)
-		else:
-			enter_edit()
+	if(not get_tree().root.get_children()[0].editTarget):
+		enter_edit()
 
 
 func _on_button_pressed() -> void:
