@@ -65,7 +65,7 @@ func _physics_process(delta: float) -> void:
 		
 		camerapos.y += v
 		camerapos.y = clamp(camerapos.y,$Line2D.points[0].y,last.position.y + last.size.y)
-		$Camera2D.position = lerp($Camera2D.position,camerapos,0.12)
+		$Camera2D.position = lerp($Camera2D.position,camerapos,0.17)
 		$Camera2D.zoom = lerp($Camera2D.zoom,Vector2(0.8,0.8),0.1)
 		lastpos = get_viewport().get_mouse_position()
 	else:

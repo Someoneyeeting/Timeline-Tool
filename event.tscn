@@ -124,6 +124,7 @@ modulate = Color(1, 0.501961, 0, 1)
 layout_mode = 2
 theme = ExtResource("5_e7lhe")
 text = "Title"
+autowrap_mode = 3
 
 [node name="Labeledit" type="TextEdit" parent="VSplitContainer/Body/MarginContainer/VSplitContainer"]
 unique_name_in_owner = true
@@ -132,6 +133,7 @@ modulate = Color(1, 0.501961, 0, 1)
 layout_mode = 2
 theme = ExtResource("5_e7lhe")
 text = "Title"
+wrap_mode = 1
 scroll_fit_content_height = true
 
 [node name="TextEdit" type="TextEdit" parent="VSplitContainer/Body/MarginContainer/VSplitContainer"]
