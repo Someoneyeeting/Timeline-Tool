@@ -64,11 +64,12 @@ default_font = ExtResource("1_3pqkn")
 default_font_size = 24
 
 [node name="event" type="PanelContainer"]
-custom_minimum_size = Vector2(0, 523)
+custom_minimum_size = Vector2(447, 523)
 offset_right = 450.0
 offset_bottom = 353.0
 theme_override_styles/panel = SubResource("StyleBoxEmpty_e0wkh")
 script = ExtResource("2_l4xi0")
+metadata/_edit_vertical_guides_ = [447.0]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("../VSplitContainer")

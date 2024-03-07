@@ -1,6 +1,8 @@
 extends Node2D
 
 
+
+
 var a = 0
 var v = 0.0
 
@@ -23,7 +25,11 @@ func add_event(left):
 		cont.add_child(sep)
 		sep.custom_minimum_size.x = 510
 	
+	event.timeroot = self
+	
 	cont.add_child(event)
+	
+	
 	
 	$VBoxContainer.add_child(cont)
 	

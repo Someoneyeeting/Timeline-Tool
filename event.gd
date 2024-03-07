@@ -5,6 +5,8 @@ signal exitEdit
 var image : Texture2D
 #@onready var ri = $PanelContainer/MarginContainer/VSplitContainer/RichTextLabel
 
+@onready var dateroot
+
 var title = "Title"
 var body = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
 var editmode = false
@@ -16,24 +18,29 @@ var imagesize = 210.0
 
 
 func _ready() -> void:
-	$AnimationPlayer.play("Create")
 	%Image.material = %Image.material.duplicate()
+	
+	
+	
+	enter_edit(true)
+	#connect("enterEdit",enter_edit)
+	#connect("exitEdit",exit_edit)
+	$AnimationPlayer.play("Create")
 
-func enter_edit():
+func enter_edit(event):
 	editmode = true
 	
 	$VSplitContainer/Image/Button.show()
 	
+	%RichTextLabel.hide()
 	%Labeledit.text = title
 	%TextEdit.text = body
 	%Label.hide()
 	%Labeledit.show()
 	%TextEdit.show()
-	%RichTextLabel.hide()
 	$TextureButton.hide()
-	emit_signal("enterEdit",self)
 	
-func exit_edit(save):
+func exit_edit():
 	editmode = false
 	
 	$VSplitContainer/Image/Button.hide()
@@ -45,8 +52,7 @@ func exit_edit(save):
 	%Labeledit.hide()
 	%TextEdit.hide()
 	%RichTextLabel.show()
-	$TextureButton.show()
-	emit_signal("exitEdit")
+	#$TextureButton.show()
 
 func _physics_process(delta: float) -> void:
 	
@@ -55,12 +61,14 @@ func _physics_process(delta: float) -> void:
 	%Label.text = title
 	
 	if(Input.is_action_just_pressed("ui_cancel") and editmode):
-		exit_edit(false)
+		#emit_signal("exitEdit")
+		pass
 	
 	
 	if(editmode):
 		if(Input.is_action_just_pressed("click") and not get_rect().has_point(get_local_mouse_position())):
-			exit_edit(false)
+			#emit_signal("exitEdit")
+			pass
 	
 	if(image):
 		
@@ -103,11 +111,22 @@ func _physics_process(delta: float) -> void:
 			%Image.custom_minimum_size.y = lerp(%Image.custom_minimum_size.y,imagesize,0.2)
 		else:
 			%Image.custom_minimum_size.y = lerp(%Image.custom_minimum_size.y,0.,0.2)
+	
+	$TextureButton.size.y = 0
 			
 
+func _draw() -> void:
+	pass
+	#print($TextureButton.get_global_rect().size)
+	#for i in get_children():
+		#if(i is Control):
+			#draw_rect(Rect2(i.global_position - global_position,i.get_global_rect().size),Color.RED,false,4)
+
 func _on_texture_button_pressed() -> void:
-	if(not get_tree().root.get_children()[0].editTarget):
-		enter_edit()
+	print("AAAAAAAAAA")
+	if(not dateroot.timeroot.editTarget):
+		#emit_signal("enterEdit",self)
+		pass
 
 
 func _on_button_pressed() -> void:

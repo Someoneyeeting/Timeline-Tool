@@ -1,8 +1,30 @@
-extends VBoxContainer
+extends PanelContainer
 
 const EVENT = preload("res://event.tscn")
 
-@onready var eventTree = $VBoxContainer/Events
+
+signal enterEdit(event)
+signal exitEdit
+
+var events = []
+@onready var timeroot
+
+
+@onready var eventTree = $Date/VBoxContainer/Events
+
+func _ready():
+	enterEdit.connect(timeroot.enter_edit)
+	exitEdit.connect(timeroot.exit_edit)
+	
+	enterEdit.connect(enter_edit)
+	exitEdit.connect(exit_edit)
+
+
+func enter_edit(event):
+	%FocusBtn.hide()
+
+func exit_edit():
+	%FocusBtn.show()
 
 func add_event():
 	var event = EVENT.instantiate()
@@ -11,29 +33,38 @@ func add_event():
 	
 	cont.add_child(event)
 	
-	event.body = "A".repeat(randi_range(10,60))
-
-	event.connect("enterEdit",get_node("../../../").enter_edit)
-	event.connect("exitEdit",get_node("../../../").exit_edit)
+	event.body = "A".repeat(randi_range(10,30))
+	event.dateroot = self
+	
+	enterEdit.connect(event.enter_edit)
+	exitEdit.connect(event.exit_edit)
 	
 	eventTree.add_child(cont)
 	
-	var btn = load("res://button.tscn").instantiate()
+	events.append(event)
+	
 
 
+func _input(event: InputEvent) -> void:
+	if(event.is_action_pressed("click")):
+		if(not get_global_rect().has_point(get_global_mouse_position()) and timeroot.editTarget == self):
+			emit_signal("exitEdit")
 
 func _physics_process(delta: float) -> void:
-	queue_redraw()
-	if(not $VBoxContainer/Button.is_hovered()):
-		$VBoxContainer/Button/Panel.size.y = lerp($VBoxContainer/Button/Panel.size.y,0.,0.4)
+	if(not $Date/VBoxContainer/Button.is_hovered()):
+		$Date/VBoxContainer/Button/Panel.size.y = lerp($Date/VBoxContainer/Button/Panel.size.y,0.,0.4)
 	else:
-		$VBoxContainer/Button/Panel.size.y = lerp($VBoxContainer/Button/Panel.size.y,50.,0.4)
-	if(len($VBoxContainer/Events.get_children()) == 0):
-		$VBoxContainer.size.x = 0
+		$Date/VBoxContainer/Button/Panel.size.y = lerp($Date/VBoxContainer/Button/Panel.size.y,50.,0.4)
+	if(len($Date/VBoxContainer/Events.get_children()) == 0):
+		$Date/VBoxContainer.size.x = 0
 	else:
-		$VBoxContainer.size.x = $VBoxContainer/Events.size.x
+		$Date/VBoxContainer.size.x = $Date/VBoxContainer/Events.size.x
 		
 
 
 func _on_button_pressed() -> void:
 	add_event()
+
+
+func _on_texture_button_pressed() -> void:
+	emit_signal("enterEdit",self)
