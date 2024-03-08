@@ -59,22 +59,26 @@ func _physics_process(delta: float) -> void:
 	var last = $VBoxContainer.get_children()[-1].get_global_rect()
 	$Line2D.points[-1].y = lerp($Line2D.points[-1].y,last.position.y + last.size.y + 50,0.1)
 	
+	v = 0.
+	if(Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)):
+		v = lastpos.y - get_viewport().get_mouse_position().y
+	
+	if(Input.is_action_just_pressed("mwd")):
+		v = lerp(v,speed,0.4)
+	elif(Input.is_action_just_pressed("mwu")):
+		v = lerp(v,-speed,0.4)
+	
+	camerapos.y += v
+	
 	if(not editTarget):
-		v = 0.
-		if(Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)):
-			v = lastpos.y - get_viewport().get_mouse_position().y
-		
-		if(Input.is_action_just_pressed("mwd")):
-			v = lerp(v,speed,0.4)
-		elif(Input.is_action_just_pressed("mwu")):
-			v = lerp(v,-speed,0.4)
-		
-		camerapos.y += v
 		camerapos.y = clamp(camerapos.y,$Line2D.points[0].y,last.position.y + last.size.y)
-		$Camera2D.position = lerp($Camera2D.position,camerapos,0.17)
+		$Camera2D.position.x = lerp($Camera2D.position.x,0.,0.17)
 		$Camera2D.zoom = lerp($Camera2D.zoom,Vector2(0.8,0.8),0.1)
-		lastpos = get_viewport().get_mouse_position()
 	else:
 		var center = editTarget.global_position + editTarget.size / 2
-		$Camera2D.position = lerp($Camera2D.position,center,0.12)
+		camerapos.y = clamp(camerapos.y,editTarget.global_position.y,editTarget.global_position.y + editTarget.get_global_rect().size.y)
+		$Camera2D.position.x = lerp($Camera2D.position.x,center.x,0.12)
 		$Camera2D.zoom = lerp($Camera2D.zoom,Vector2(0.7,0.7),0.1)
+
+	lastpos = get_viewport().get_mouse_position()
+	$Camera2D.position.y = lerp($Camera2D.position.y,camerapos.y,0.17)

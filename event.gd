@@ -8,7 +8,7 @@ var image : Texture2D
 @onready var dateroot
 
 var title = "Title"
-var body = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+var body = "Body"
 var editmode = false
 var is_hovered = false
 var dragpos = null
@@ -21,7 +21,7 @@ func _ready() -> void:
 	%Image.material = %Image.material.duplicate()
 	
 	
-	
+	#exit_edit()
 	enter_edit(true)
 	#connect("enterEdit",enter_edit)
 	#connect("exitEdit",exit_edit)

@@ -9,8 +9,9 @@ signal exitEdit
 var events = []
 @onready var timeroot
 
-
 @onready var eventTree = $Date/VBoxContainer/Events
+
+var clickt = 0
 
 func _ready():
 	enterEdit.connect(timeroot.enter_edit)
@@ -33,7 +34,7 @@ func add_event():
 	
 	cont.add_child(event)
 	
-	event.body = "A".repeat(randi_range(10,30))
+	#event.body = "A".repeat(randi_range(10,30))
 	event.dateroot = self
 	
 	enterEdit.connect(event.enter_edit)
@@ -46,8 +47,18 @@ func add_event():
 
 
 func _input(event: InputEvent) -> void:
+	if(event is InputEventMouseMotion):
+		if(event.velocity.length() > 30):
+			$clickt.stop()
 	if(event.is_action_pressed("click")):
-		if(not get_global_rect().has_point(get_global_mouse_position()) and timeroot.editTarget == self):
+		var rect = get_global_rect()
+		var s = 40
+		rect.position -= Vector2(s,s)
+		rect.size += Vector2(s,s) * 2
+		if(not rect.has_point(get_global_mouse_position()) and timeroot.editTarget == self):
+			$clickt.start()
+	if(event.is_action_released("click")):
+		if($clickt.time_left > 0):
 			emit_signal("exitEdit")
 
 func _physics_process(delta: float) -> void:
@@ -61,7 +72,14 @@ func _physics_process(delta: float) -> void:
 		$Date/VBoxContainer.size.x = $Date/VBoxContainer/Events.size.x
 		
 
-
+func _draw():
+	pass
+	#var rect = get_global_rect()
+	#rect.position -= Vector2(150,150)
+	#rect.position -= global_position
+	#rect.size += Vector2(300,300)
+	#draw_rect(rect,Color.WHITE,false,4)
+	
 func _on_button_pressed() -> void:
 	add_event()
 
