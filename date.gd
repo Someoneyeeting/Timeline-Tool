@@ -19,13 +19,22 @@ func _ready():
 	
 	enterEdit.connect(enter_edit)
 	exitEdit.connect(exit_edit)
+	
+	%FocusBtn.show()
 
 
 func enter_edit(event):
 	%FocusBtn.hide()
+	$Date/Label.hide()
+	$Date/LineEdit.show()
+	$Date/LineEdit.text = $Date/Label.text
+	
 
 func exit_edit():
 	%FocusBtn.show()
+	$Date/Label.show()
+	$Date/LineEdit.hide()
+	$Date/Label.text = $Date/LineEdit.text
 
 func add_event():
 	var event = EVENT.instantiate()
