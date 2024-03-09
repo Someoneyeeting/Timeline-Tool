@@ -81,16 +81,14 @@ func _input(event: InputEvent) -> void:
 			emit_signal("exitEdit")
 
 func _physics_process(delta: float) -> void:
+	var s = $Node2D/ColorRect.size.y / 2
+	$Node2D.global_position.y = $Date/Label.get_global_rect().position.y + 30 - s
+	$Node2D.global_position.x = -s
 	pass
 		
 
 func _draw():
 	pass
-	#var rect = get_global_rect()
-	#rect.position -= Vector2(150,150)
-	#rect.position -= global_position
-	#rect.size += Vector2(300,300)
-	#draw_rect(rect,Color.WHITE,false,4)
 	
 func _on_button_pressed() -> void:
 	add_event()

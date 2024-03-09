@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://b36a41i66lka8"]
+[gd_scene load_steps=10 format=3 uid="uid://b36a41i66lka8"]
 
 [ext_resource type="Script" path="res://date.gd" id="1_0ne7s"]
 [ext_resource type="Theme" uid="uid://c1wftlbcrx1c6" path="res://Font.tres" id="1_7gtl1"]
 [ext_resource type="PackedScene" uid="uid://dqtfa3kjmpq7u" path="res://addbutton.tscn" id="3_vullo"]
+[ext_resource type="Shader" path="res://date.gdshader" id="4_vy0rn"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lhfph"]
 
@@ -42,6 +43,9 @@ _data = {
 "Create": SubResource("Animation_b6oxd"),
 "RESET": SubResource("Animation_16m6l")
 }
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rdxgd"]
+shader = ExtResource("4_vy0rn")
 
 [node name="Panel" type="PanelContainer"]
 custom_minimum_size = Vector2(350, 0)
@@ -95,6 +99,21 @@ one_shot = true
 libraries = {
 "": SubResource("AnimationLibrary_53gee")
 }
+
+[node name="Node2D" type="Node2D" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="Node2D"]
+modulate = Color(0.905882, 0.494118, 0, 1)
+material = SubResource("ShaderMaterial_rdxgd")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_right = 25.0
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [connection signal="pressed" from="Date/VBoxContainer/Button" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="FocusBtn" to="." method="_on_texture_button_pressed"]
