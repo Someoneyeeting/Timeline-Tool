@@ -19,13 +19,8 @@ var imagesize = 210.0
 
 func _ready() -> void:
 	%Image.material = %Image.material.duplicate()
-	
-	
-	#exit_edit()
-	enter_edit(true)
-	#connect("enterEdit",enter_edit)
-	#connect("exitEdit",exit_edit)
 	$AnimationPlayer.play("Create")
+	enter_edit(true)
 
 func enter_edit(event):
 	editmode = true

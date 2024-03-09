@@ -1,20 +1,52 @@
-[gd_scene load_steps=5 format=3 uid="uid://b36a41i66lka8"]
+[gd_scene load_steps=8 format=3 uid="uid://b36a41i66lka8"]
 
 [ext_resource type="Script" path="res://date.gd" id="1_0ne7s"]
 [ext_resource type="Theme" uid="uid://c1wftlbcrx1c6" path="res://Font.tres" id="1_7gtl1"]
+[ext_resource type="PackedScene" uid="uid://dqtfa3kjmpq7u" path="res://addbutton.tscn" id="3_vullo"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lhfph"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jr4aw"]
-bg_color = Color(0.6, 0.6, 0.6, 0.219608)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
+[sub_resource type="Animation" id="Animation_b6oxd"]
+resource_name = "Create"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(0.287174, 1),
+"update": 0,
+"values": [Vector2(1, 0), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_16m6l"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_53gee"]
+_data = {
+"Create": SubResource("Animation_b6oxd"),
+"RESET": SubResource("Animation_16m6l")
+}
 
 [node name="Panel" type="PanelContainer"]
 custom_minimum_size = Vector2(350, 0)
-offset_right = 240.0
+layout_direction = 2
+offset_right = 447.0
 offset_bottom = 134.0
 theme_override_styles/panel = SubResource("StyleBoxEmpty_lhfph")
 script = ExtResource("1_0ne7s")
@@ -23,6 +55,7 @@ script = ExtResource("1_0ne7s")
 layout_mode = 2
 
 [node name="Label" type="Label" parent="Date"]
+custom_minimum_size = Vector2(447, 0)
 layout_mode = 2
 theme = ExtResource("1_7gtl1")
 theme_override_colors/font_color = Color(0.905882, 0.494118, 0, 1)
@@ -31,6 +64,7 @@ text = "771/5/13"
 
 [node name="LineEdit" type="LineEdit" parent="Date"]
 visible = false
+custom_minimum_size = Vector2(447, 0)
 layout_mode = 2
 theme = ExtResource("1_7gtl1")
 theme_override_colors/font_color = Color(0.905882, 0.494118, 0, 1)
@@ -45,34 +79,8 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 20
 
-[node name="Button" type="Button" parent="Date/VBoxContainer"]
-self_modulate = Color(1, 1, 1, 0)
-custom_minimum_size = Vector2(240, 50)
+[node name="Button" parent="Date/VBoxContainer" instance=ExtResource("3_vullo")]
 layout_mode = 2
-
-[node name="Panel" type="Panel" parent="Date/VBoxContainer/Button"]
-clip_contents = true
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 3
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_jr4aw")
-
-[node name="Label" type="Label" parent="Date/VBoxContainer/Button/Panel"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme = ExtResource("1_7gtl1")
-text = "+"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="FocusBtn" type="TextureButton" parent="."]
 unique_name_in_owner = true
@@ -82,6 +90,11 @@ layout_mode = 2
 [node name="clickt" type="Timer" parent="."]
 wait_time = 0.4
 one_shot = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_53gee")
+}
 
 [connection signal="pressed" from="Date/VBoxContainer/Button" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="FocusBtn" to="." method="_on_texture_button_pressed"]

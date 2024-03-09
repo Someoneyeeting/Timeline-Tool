@@ -6,6 +6,8 @@ const EVENT = preload("res://event.tscn")
 signal enterEdit(event)
 signal exitEdit
 
+var left = false
+
 var events = []
 @onready var timeroot
 
@@ -21,7 +23,16 @@ func _ready():
 	exitEdit.connect(exit_edit)
 	
 	%FocusBtn.show()
-
+	
+	$AnimationPlayer.play("Create")
+	
+	if(left):
+		$Date/Label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		$Date/LineEdit.alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	else:
+		$Date/Label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+		$Date/LineEdit.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	
 
 func enter_edit(event):
 	%FocusBtn.hide()
@@ -43,7 +54,6 @@ func add_event():
 	
 	cont.add_child(event)
 	
-	#event.body = "A".repeat(randi_range(10,30))
 	event.dateroot = self
 	
 	enterEdit.connect(event.enter_edit)
@@ -57,11 +67,11 @@ func add_event():
 
 func _input(event: InputEvent) -> void:
 	if(event is InputEventMouseMotion):
-		if(event.velocity.length() > 30):
+		if(event.velocity.length() > 40):
 			$clickt.stop()
 	if(event.is_action_pressed("click")):
 		var rect = get_global_rect()
-		var s = 40
+		var s = 0
 		rect.position -= Vector2(s,s)
 		rect.size += Vector2(s,s) * 2
 		if(not rect.has_point(get_global_mouse_position()) and timeroot.editTarget == self):
@@ -71,14 +81,7 @@ func _input(event: InputEvent) -> void:
 			emit_signal("exitEdit")
 
 func _physics_process(delta: float) -> void:
-	if(not $Date/VBoxContainer/Button.is_hovered()):
-		$Date/VBoxContainer/Button/Panel.size.y = lerp($Date/VBoxContainer/Button/Panel.size.y,0.,0.4)
-	else:
-		$Date/VBoxContainer/Button/Panel.size.y = lerp($Date/VBoxContainer/Button/Panel.size.y,50.,0.4)
-	if(len($Date/VBoxContainer/Events.get_children()) == 0):
-		$Date/VBoxContainer.size.x = 0
-	else:
-		$Date/VBoxContainer.size.x = $Date/VBoxContainer/Events.size.x
+	pass
 		
 
 func _draw():
