@@ -37,7 +37,7 @@ func add_event():
 	
 	cont.add_child(event)
 	
-	v = event.size.y
+	v = event.size.y / 2
 	
 	$VBoxContainer/Dates.add_child(cont)
 	
