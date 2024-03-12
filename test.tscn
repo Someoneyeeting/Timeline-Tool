@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://cgovjycm0bvm7"]
+
+[ext_resource type="Script" path="res://test.gd" id="1_56yhx"]
+
+[sub_resource type="Curve2D" id="Curve2D_c56te"]
+_data = {
+"points": PackedVector2Array(1.98425, -63.0929, 0, 80, 0, 0, 0, -120, 0, 0, 400, 200)
+}
+point_count = 2
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_56yhx")
+
+[node name="Line2D" type="Line2D" parent="."]
+position = Vector2(442, 42)
+points = PackedVector2Array(0, 0, 0, 300)
+
+[node name="Line2D2" type="Line2D" parent="."]
+points = PackedVector2Array(0, 0, 0.0714582, 1.84255, 0.284351, 3.65692, 0.636455, 5.44366, 1.12555, 7.20335, 1.74941, 8.93653, 2.50581, 10.6438, 3.39253, 12.3256, 4.40735, 13.9826, 5.54804, 15.6153, 6.81238, 17.2242, 8.19816, 18.81, 9.70314, 20.3732, 11.3251, 21.9143, 13.0618, 23.4339, 14.9111, 24.9326, 16.8706, 26.4108, 18.9383, 27.8693, 21.1118, 29.3084, 23.389, 30.7288, 25.7676, 32.131)
+joint_mode = 2
+end_cap_mode = 2
+
+[node name="Path2D" type="Path2D" parent="."]
+visible = false
+curve = SubResource("Curve2D_c56te")

@@ -2,6 +2,7 @@ extends Control
 
 signal enterEdit
 signal exitEdit
+signal delete
 var image : Texture2D
 #@onready var ri = $PanelContainer/MarginContainer/VSplitContainer/RichTextLabel
 
@@ -14,13 +15,19 @@ var is_hovered = false
 var dragpos = null
 var ogpos = 0
 var imagesize = 210.0
-
+var index = -1
 
 
 func _ready() -> void:
 	%Image.material = %Image.material.duplicate()
 	$AnimationPlayer.play("Create")
 	enter_edit(true)
+	
+	delete.connect(_delete)
+
+func _delete():
+	#dateroot.eventTree.get_children().remove_at(dateroot.eventTree.get_children().find(self))
+	queue_free()
 
 func enter_edit(event):
 	editmode = true
@@ -33,15 +40,18 @@ func enter_edit(event):
 	%Label.hide()
 	%Labeledit.show()
 	%TextEdit.show()
-	$TextureButton.hide()
+	#$TextureButton.hide()
 	
 func exit_edit():
 	editmode = false
 	
 	$VSplitContainer/Image/Button.hide()
 	
-	
 	title = %Labeledit.text
+	
+	if(title == ""):
+		$AnimationPlayer.play_backwards("Create")
+	
 	body = %TextEdit.text
 	%Label.show()
 	%Labeledit.hide()
@@ -136,3 +146,8 @@ func _on_image_select_file_selected(path: String) -> void:
 	var image_texture = ImageTexture.new()
 	image_texture.set_image(img)
 	image = image_texture
+
+
+func _on_animation_player_animation_finished(anim_name: StringName) -> void:
+	if(title == ""):
+		emit_signal("delete")

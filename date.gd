@@ -5,6 +5,7 @@ const EVENT = preload("res://event.tscn")
 
 signal enterEdit(event)
 signal exitEdit
+signal Delete
 
 var left = false
 
