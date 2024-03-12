@@ -1,0 +1,123 @@
+[gd_scene load_steps=10 format=3 uid="uid://b36a41i66lka8"]
+
+[ext_resource type="Script" path="res://date.gd" id="1_0ne7s"]
+[ext_resource type="Theme" uid="uid://c1wftlbcrx1c6" path="res://Font.tres" id="1_7gtl1"]
+[ext_resource type="PackedScene" uid="uid://dqtfa3kjmpq7u" path="res://addbutton.tscn" id="3_vullo"]
+[ext_resource type="Shader" path="res://date.gdshader" id="4_vy0rn"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lhfph"]
+
+[sub_resource type="Animation" id="Animation_b6oxd"]
+resource_name = "Create"
+length = 0.34
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(0.287174, 1),
+"update": 0,
+"values": [Vector2(1, 0), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_16m6l"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_53gee"]
+_data = {
+"Create": SubResource("Animation_b6oxd"),
+"RESET": SubResource("Animation_16m6l")
+}
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rdxgd"]
+shader = ExtResource("4_vy0rn")
+
+[node name="Panel" type="PanelContainer"]
+custom_minimum_size = Vector2(350, 0)
+layout_direction = 2
+offset_right = 447.0
+offset_bottom = 134.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_lhfph")
+script = ExtResource("1_0ne7s")
+
+[node name="Date" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Date"]
+custom_minimum_size = Vector2(447, 0)
+layout_mode = 2
+theme = ExtResource("1_7gtl1")
+theme_override_colors/font_color = Color(1, 0.588235, 0.0509804, 1)
+theme_override_font_sizes/font_size = 50
+text = "771/5/13"
+
+[node name="LineEdit" type="LineEdit" parent="Date"]
+visible = false
+custom_minimum_size = Vector2(447, 0)
+layout_mode = 2
+theme = ExtResource("1_7gtl1")
+theme_override_colors/font_color = Color(1, 0.588235, 0.0509804, 1)
+context_menu_enabled = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Date"]
+show_behind_parent = true
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Events" type="VBoxContainer" parent="Date/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 20
+
+[node name="Button" parent="Date/VBoxContainer" instance=ExtResource("3_vullo")]
+layout_mode = 2
+
+[node name="FocusBtn" type="TextureButton" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="clickt" type="Timer" parent="."]
+wait_time = 0.4
+one_shot = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_53gee")
+}
+
+[node name="Node2D" type="Node2D" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="Node2D"]
+modulate = Color(1, 0.588235, 0.0509804, 1)
+material = SubResource("ShaderMaterial_rdxgd")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_right = 25.0
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[connection signal="mouse_entered" from="Date/Label" to="." method="_on_label_mouse_entered"]
+[connection signal="mouse_exited" from="Date/Label" to="." method="_on_label_mouse_exited"]
+[connection signal="pressed" from="Date/VBoxContainer/Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="FocusBtn" to="." method="_on_texture_button_pressed"]
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

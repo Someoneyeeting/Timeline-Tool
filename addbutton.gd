@@ -6,6 +6,9 @@ extends Button
 	
 var hovered = false
 
+func _ready() -> void:
+		$Panel.size.y = 0.
+
 func _process(delta: float) -> void:
 	if(not hovered):
 		$Panel.size.y = lerp($Panel.size.y,0.,0.4)

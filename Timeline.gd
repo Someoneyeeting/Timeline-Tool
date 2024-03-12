@@ -14,33 +14,43 @@ var lastpos = Vector2(0,0)
 var camerapos = Vector2(0,0)
 var ogcampos = Vector2(0,0)
 
+@onready var dateTree = $VBoxContainer/Dates
+
 var DATE = preload("res://date.tscn")
 
 func add_event():
 	var left
-	if($VBoxContainer/Dates.get_child_count() > 0):
-		left = not ($VBoxContainer/Dates.get_children()[-1].get_children()[-1].left)
+	if(dateTree.get_child_count() > 0):
+		left = not (dateTree.get_children()[-1].get_children()[-1].left)
 	else:
 		left = true
 		
 	var event = DATE.instantiate()
 	var cont = HBoxContainer.new()
 	cont.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	if(not left):
-		var sep = Container.new()
-		cont.add_child(sep)
+	cont.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	var sep = Container.new()
+	cont.add_child(sep)
+	if(left):
 		sep.custom_minimum_size.x = 510
 	
 	event.timeroot = self
 	
 	event.left = left
 	
+	event.delete.connect(remove_event)
+	
 	cont.add_child(event)
 	
 	v = event.size.y / 2
 	
-	$VBoxContainer/Dates.add_child(cont)
+	dateTree.add_child(cont)
 	
+	
+	
+func remove_event(index):
+	for i in range(index + 1,dateTree.get_child_count()):
+		dateTree.get_children()[i].get_children()[-1].switch(null)
 	
 func enter_edit(target):
 	editTarget = target
@@ -61,7 +71,7 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	
 	var last = $VBoxContainer.get_children()[-1].get_global_rect()
-	$Line2D.points[-1].y = lerp($Line2D.points[-1].y,last.position.y + last.size.y + 50,0.1)
+	$Line2D.points[-1].y = lerp($Line2D.points[-1].y,last.position.y + last.size.y,0.1)
 	
 	v = lerp(v,0.,0.4)
 	if(Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)):
