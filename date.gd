@@ -89,6 +89,8 @@ func add_event():
 	
 	eventTree.add_child(cont)
 	
+	index = timeroot.dateTree.get_children().find(get_parent())
+	
 	events.append(event)
 	
 
@@ -113,7 +115,6 @@ func _physics_process(delta: float) -> void:
 	$Node2D.global_position.y = $Date/Label.get_global_rect().position.y + 30 - s
 	$Node2D.global_position.x = -s
 	
-	index = timeroot.dateTree.get_children().find(get_parent())
 	#if(left != (index % 2 == 0)):
 		#left = index % 2 == 0
 		#switch(left)

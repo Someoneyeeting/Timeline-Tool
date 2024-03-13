@@ -4,6 +4,7 @@ signal enterEdit
 signal exitEdit
 signal delete
 var image : Texture2D
+var imagepath : String
 #@onready var ri = $PanelContainer/MarginContainer/VSplitContainer/RichTextLabel
 
 @onready var dateroot
@@ -21,7 +22,20 @@ var index = -1
 func _ready() -> void:
 	%Image.material = %Image.material.duplicate()
 	$AnimationPlayer.play("Create")
+	
+	
+	if(FileAccess.file_exists("user://test.json")):
+		var save_game = FileAccess.open("user://test.json", FileAccess.READ)
+		var json = JSON.parse_string(save_game.get_line())
+		#if(not json == OK):
+			#print("error")
+		print(json)
+		print(save_game.get_line())
+		load_from_json(json)
+	
+	
 	enter_edit(true)
+	
 	
 	delete.connect(_delete)
 
@@ -57,6 +71,10 @@ func exit_edit():
 	%Labeledit.hide()
 	%TextEdit.hide()
 	%RichTextLabel.show()
+	
+	var save_game = FileAccess.open("user://test.json", FileAccess.WRITE)
+	save_game.store_line(JSON.stringify(get_json()))
+	
 	#$TextureButton.show()
 
 func _physics_process(delta: float) -> void:
@@ -143,6 +161,9 @@ func _on_image_select_file_selected(path: String) -> void:
 	var img = Image.new()
 	img.load(path)
 	
+	self.imagepath = path
+	print(imagepath)
+	
 	var image_texture = ImageTexture.new()
 	image_texture.set_image(img)
 	image = image_texture
@@ -151,3 +172,20 @@ func _on_image_select_file_selected(path: String) -> void:
 func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 	if(title == ""):
 		emit_signal("delete")
+
+
+func get_json():
+	var json = {
+		"title": title,
+		"body": body,
+		"img": imagepath,
+		"imgoff": $VSplitContainer/Image/Sprite2D.position.y
+	}
+	
+	return json
+	
+func load_from_json(json):
+	title = json["title"]
+	body = json["body"]
+	_on_image_select_file_selected(json["img"])
+	$VSplitContainer/Image/Sprite2D.position.y = json["imgoff"]

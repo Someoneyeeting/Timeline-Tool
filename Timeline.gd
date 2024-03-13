@@ -51,6 +51,7 @@ func add_event():
 func remove_event(index):
 	for i in range(index + 1,dateTree.get_child_count()):
 		dateTree.get_children()[i].get_children()[-1].switch(null)
+		dateTree.get_children()[i].get_children()[-1].index -= 1
 	
 func enter_edit(target):
 	editTarget = target
