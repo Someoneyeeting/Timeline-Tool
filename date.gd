@@ -30,8 +30,11 @@ func _ready():
 	%FocusBtn.show()
 	
 	$Date/LineEdit.text = $Date/Label.text
+	index = timeroot.dateTree.get_children().find(get_parent())
 		
 	switch(left)
+	
+		
 	
 	
 
@@ -74,24 +77,29 @@ func exit_edit():
 	if($Date/LineEdit.text == ""):
 		delete.emit(index)
 	$Date/Label.text = $Date/LineEdit.text
-
+	
+	
+	#var save_game = FileAccess.open("user://test.json", FileAccess.WRITE)
+	#var json = JSON.stringify(get_json_data())
+	#save_game.store_line(json)
+	
+	
 func add_event():
 	var event = EVENT.instantiate()
 	var cont = VBoxContainer.new()
 	cont.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	
-	cont.add_child(event)
 	
 	event.dateroot = self
 	
 	enterEdit.connect(event.enter_edit)
 	exitEdit.connect(event.exit_edit)
 	
-	eventTree.add_child(cont)
+	eventTree.add_child(event)
 	
-	index = timeroot.dateTree.get_children().find(get_parent())
 	
 	events.append(event)
+	
+	return event
 	
 
 
@@ -135,3 +143,26 @@ func _on_texture_button_pressed() -> void:
 func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 	if($Date/LineEdit.text == ""):
 		get_parent().queue_free()
+		
+
+
+func get_json_data():
+	var json = {"date": $Date/LineEdit.text}
+	var childs = []
+	for i in $Date/VBoxContainer/Events.get_children():
+		childs.append(i.get_json())
+	
+	json["events"] = childs
+	
+	return json
+
+func load_from_json(json):
+	$Date/Label.text = json["date"]
+	$Date/LineEdit.text = json["date"]
+	for i in json["events"]:
+		var event = add_event()
+		event.exit_edit()
+		event.load_from_json(i)
+		
+
+	

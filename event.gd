@@ -4,7 +4,7 @@ signal enterEdit
 signal exitEdit
 signal delete
 var image : Texture2D
-var imagepath : String
+var imagepath := ""
 #@onready var ri = $PanelContainer/MarginContainer/VSplitContainer/RichTextLabel
 
 @onready var dateroot
@@ -15,7 +15,7 @@ var editmode = false
 var is_hovered = false
 var dragpos = null
 var ogpos = 0
-var imagesize = 210.0
+var imagesize = 230.0
 var index = -1
 
 
@@ -23,15 +23,6 @@ func _ready() -> void:
 	%Image.material = %Image.material.duplicate()
 	$AnimationPlayer.play("Create")
 	
-	
-	if(FileAccess.file_exists("user://test.json")):
-		var save_game = FileAccess.open("user://test.json", FileAccess.READ)
-		var json = JSON.parse_string(save_game.get_line())
-		#if(not json == OK):
-			#print("error")
-		print(json)
-		print(save_game.get_line())
-		load_from_json(json)
 	
 	
 	enter_edit(true)
@@ -72,8 +63,8 @@ func exit_edit():
 	%TextEdit.hide()
 	%RichTextLabel.show()
 	
-	var save_game = FileAccess.open("user://test.json", FileAccess.WRITE)
-	save_game.store_line(JSON.stringify(get_json()))
+	#var save_game = FileAccess.open("user://test.json", FileAccess.WRITE)
+	#save_game.store_line(JSON.stringify(get_json()))
 	
 	#$TextureButton.show()
 
@@ -83,19 +74,15 @@ func _physics_process(delta: float) -> void:
 	%RichTextLabel.text = body
 	%Label.text = title
 	
-	if(Input.is_action_just_pressed("ui_cancel") and editmode):
-		#emit_signal("exitEdit")
-		pass
+	if(Input.is_action_just_released("wheel")):
+		image = null
+		imagepath = ""
+		
 	
-	
-	if(editmode):
-		if(Input.is_action_just_pressed("click") and not get_rect().has_point(get_local_mouse_position())):
-			#emit_signal("exitEdit")
-			pass
-	
+	$VSplitContainer/Image/Sprite2D.texture = image
+	%Image.material.set_shader_parameter("image",image)
 	if(image):
 		
-		$VSplitContainer/Image/Sprite2D.texture = image
 		var sc = %Image.size.x / image.get_size().x
 		$VSplitContainer/Image/Sprite2D.scale = Vector2(sc,sc)
 		
@@ -121,7 +108,6 @@ func _physics_process(delta: float) -> void:
 			$VSplitContainer/Image/Sprite2D.hide()
 
 		var size = %Image.size
-		%Image.material.set_shader_parameter("image",image)
 		var stretch = (float(image.get_width()) / float(image.get_height())) * (size.y / size.x)
 		%Image.material.set_shader_parameter("stretch",stretch)
 		%Image.show()
@@ -146,7 +132,6 @@ func _draw() -> void:
 			#draw_rect(Rect2(i.global_position - global_position,i.get_global_rect().size),Color.RED,false,4)
 
 func _on_texture_button_pressed() -> void:
-	print("AAAAAAAAAA")
 	if(not dateroot.timeroot.editTarget):
 		#emit_signal("enterEdit",self)
 		pass
@@ -162,7 +147,6 @@ func _on_image_select_file_selected(path: String) -> void:
 	img.load(path)
 	
 	self.imagepath = path
-	print(imagepath)
 	
 	var image_texture = ImageTexture.new()
 	image_texture.set_image(img)
@@ -187,5 +171,6 @@ func get_json():
 func load_from_json(json):
 	title = json["title"]
 	body = json["body"]
-	_on_image_select_file_selected(json["img"])
+	if(json["img"] != ""):
+		_on_image_select_file_selected(json["img"])
 	$VSplitContainer/Image/Sprite2D.position.y = json["imgoff"]

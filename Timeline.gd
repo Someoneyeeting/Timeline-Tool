@@ -46,6 +46,8 @@ func add_event():
 	
 	dateTree.add_child(cont)
 	
+	return event
+	
 	
 	
 func remove_event(index):
@@ -59,6 +61,7 @@ func enter_edit(target):
 
 func exit_edit():
 	editTarget = null
+	save_tree_json()
 	#camerapos = ogcampos
 
 func _ready() -> void:
@@ -66,6 +69,10 @@ func _ready() -> void:
 	$Line2D.add_point(Vector2(0,0))
 	$Camera2D.global_position = $Line2D.points[0]
 	$Line2D.add_point(Vector2(0,5000))
+	
+	for i in get_tree_json():
+		var date = add_event()
+		date.load_from_json(i)
 	
 
 
@@ -101,3 +108,22 @@ func _physics_process(delta: float) -> void:
 
 func _on_button_pressed() -> void:
 	add_event()
+
+
+
+func get_tree_json():
+	if(FileAccess.file_exists("user://test.json")):
+		var save = FileAccess.open("user://test.json", FileAccess.READ)
+		var json = JSON.parse_string(save.get_line())
+		
+		return json
+	
+	return []
+
+func save_tree_json():
+	var dates = []
+	for i in dateTree.get_children():
+		dates.append(i.get_children()[-1].get_json_data())
+	
+	var save = FileAccess.open("user://test.json",FileAccess.WRITE)
+	save.store_line(JSON.stringify(dates))
